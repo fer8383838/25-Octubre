@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f9e9ef">
+<title>Para ti ♡ | Beauty Box 3D</title>
+<style>
+:root { --ink:#593744; --pink:#db789f; --gold:#c7a36e; }
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; color:var(--ink); font-family:Arial,sans-serif;
+  background:radial-gradient(ellipse at 50% 45%,#fffefa 0%,#fff0f5 54%,#f5dce8 100%); }
+main { margin:auto; max-width:900px; padding:36px 14px 30px; text-align:center; }
+.kicker { font-size:11px; font-weight:700; letter-spacing:.3em; color:#b75e80; }
+h1 { margin:13px 0 8px; font:normal clamp(35px,7vw,60px)/1.13 Georgia,serif; letter-spacing:-.05em; }
+h1 em { color:#c56487; font-weight:normal; }
+.intro { font-size:14px; color:#937a85; line-height:1.65; }
+
+/* 3D real: paredes, piso, piezas cilíndricas y caras de los envases. */
+.orbit-scroll { width:100%; height:420px; overflow-x:auto; overflow-y:hidden;
+  scroll-timeline-name:--orbit; scroll-timeline-axis:x;
+  overscroll-behavior-x:contain; touch-action:pan-x;
+  scrollbar-width:auto; scrollbar-color:#c97599 #f2d5e2; }
+.orbit-scroll::-webkit-scrollbar { height:13px; }
+.orbit-scroll::-webkit-scrollbar-track { background:#f2d5e2; border-radius:20px; }
+.orbit-scroll::-webkit-scrollbar-thumb { background:#c97599; border:3px solid #f2d5e2; border-radius:20px; }
+.runway { position:relative; width:1900px; height:100%; }
+.stage { position:sticky; left:0; width:min(100vw - 28px,872px); height:100%; perspective:1000px;
+  perspective-origin:50% 43%; display:grid; place-items:center; isolation:isolate; }
+.stage:after { content:""; position:absolute; bottom:33px; width:320px; height:46px;
+  border-radius:50%; background:#93536c33; filter:blur(17px); z-index:-1; }
+.scale { transform:translateY(24px) scale(var(--size,1)); transform-style:preserve-3d; pointer-events:none; }
+.world { width:350px; height:94px; position:relative; transform-style:preserve-3d;
+  transform:rotateX(-19deg) rotateY(-29deg);
+  animation:orbit 1s linear both; animation-timeline:--orbit; }
+@keyframes orbit { from { transform:rotateX(-19deg) rotateY(-29deg); }
+  to { transform:rotateX(-19deg) rotateY(-389deg); } }
+.world *, .world *:before, .world *:after { box-sizing:border-box; }
+.wall,.floor,.edge,.item,.card-note { position:absolute; transform-style:preserve-3d; }
+.wall { border:2px solid #ba5c823b; box-shadow:inset 0 1px 17px #fff5; backface-visibility:hidden; }
+.wall:after { content:""; position:absolute; inset:9px; border:1px solid #fff8; border-radius:3px; }
+.front,.back { width:350px; height:94px; left:0; top:0; }
+.front { transform:translateZ(125px); background:linear-gradient(125deg,#f5a6c3,#e784aa 70%,#d26c98); }
+.back { transform:rotateY(180deg) translateZ(125px); background:linear-gradient(100deg,#b44d79,#e58aaa); }
+.left,.right { width:250px; height:94px; left:50px; top:0; }
+.left { transform:rotateY(-90deg) translateZ(175px); background:linear-gradient(110deg,#ce6892,#f4abc5); }
+.right { transform:rotateY(90deg) translateZ(175px); background:linear-gradient(110deg,#efa0bb,#c65e89); }
+.floor { top:94px; left:0; width:350px; height:250px; transform-origin:center top;
+  transform:rotateX(90deg) translateY(-125px);
+  background:repeating-linear-gradient(45deg,#f8bfd4 0 13px,#ffdae7 13px 26px); border:5px solid #bc5b85; }
+.edge { height:10px; top:-5px; background:linear-gradient(#fff7e1,#e99db9);
+  border:1px solid #ffe9dc; border-radius:4px; }
+.e-front { width:356px; left:-3px; transform:translateZ(128px); }
+.e-back { width:356px; left:-3px; transform:rotateY(180deg) translateZ(128px); }
+.e-left { width:256px; left:47px; transform:rotateY(-90deg) translateZ(178px); }
+.e-right { width:256px; left:47px; transform:rotateY(90deg) translateZ(178px); }
+.ribbon { position:absolute; left:44%; top:0; height:100%; width:39px;
+  background:linear-gradient(90deg,#dfb77b88,#fff7dbd9 55%,#a8794680); }
+.plaque { position:absolute; top:27px; left:50%; transform:translateX(-50%);
+  padding:12px 28px; border:1px solid #cba678; background:#fff9f1; color:#9e5270;
+  font:italic 21px Georgia,serif; white-space:nowrap; box-shadow:0 3px 10px #89416335; }
+
+/* La tarjeta también tiene dos lados y grosor. */
+.card-note { left:91px; top:-95px; width:167px; height:112px;
+  transform:translateZ(-92px) rotateY(-7deg) rotateX(-7deg); }
+.card-side { position:absolute; inset:0; padding:13px 10px; border:3px solid #dfbfa1;
+  background:linear-gradient(140deg,#fffef8,#ffeaf1);
+  box-shadow:0 6px 12px #74465b35; backface-visibility:hidden; }
+.card-side.frontside { transform:translateZ(2px); }
+.card-side.backside { transform:rotateY(180deg) translateZ(2px); display:grid; place-items:center;
+  color:#b95f82; font:italic 26px Georgia,serif; }
+.card-side small { display:block; font:10px Georgia,serif; color:#ad7b89; }
+.card-side strong { display:block; margin:10px 0 5px; font:italic bold 16px/1.13 Georgia,serif; }
+
+/* Cilindros con 10 caras tridimensionales: nada de dibujos planos. */
+.item { top:calc(94px - var(--h)); left:var(--x); width:var(--w);
+  height:var(--h); transform:translateZ(var(--z)) rotateY(var(--turn,0deg)) rotateZ(var(--tilt,0deg)); }
+.barrel { --d:30px; --coat:#d9789e; position:absolute; width:var(--d); height:var(--hh);
+  transform-style:preserve-3d; }
+.barrel span { position:absolute; left:calc(50% - var(--d)*.1625); top:0;
+  width:calc(var(--d)*.325); height:100%; backface-visibility:hidden;
+  background:linear-gradient(90deg,#0002,var(--coat) 32%,#fff5 72%,#0002);
+  transform:rotateY(var(--a)) translateZ(calc(var(--d)*.5)); }
+.barrel span:nth-child(1) { --a:0deg; }
+.barrel span:nth-child(2) { --a:36deg; }
+.barrel span:nth-child(3) { --a:72deg; }
+.barrel span:nth-child(4) { --a:108deg; }
+.barrel span:nth-child(5) { --a:144deg; }
+.barrel span:nth-child(6) { --a:180deg; }
+.barrel span:nth-child(7) { --a:216deg; }
+.barrel span:nth-child(8) { --a:252deg; }
+.barrel span:nth-child(9) { --a:288deg; }
+.barrel span:nth-child(10) { --a:324deg; }
+.barrel:before,.barrel:after { content:""; position:absolute; left:0; width:var(--d); height:var(--d);
+  border-radius:50%; background:var(--coat); border:2px solid #ffffff55; }
+.barrel:before { top:0; transform:rotateX(90deg) translateZ(calc(var(--d)*.5)); }
+.barrel:after { bottom:0; transform:rotateX(90deg) translateZ(calc(var(--d)*-.5)); }
+.lip { --x:63px; --z:14px; --w:38px; --h:94px; }
+.lip .base { --d:34px; --hh:61px; --coat:#cb8a9b; left:2px; bottom:0; }
+.lip .bullet { --d:23px; --hh:40px; --coat:#aa294f; left:7px; top:0; }
+.lip .ring { --d:36px; --hh:8px; --coat:#d6ab62; left:1px; top:31px; }
+.mascara { --x:116px; --z:-46px; --w:32px; --h:120px; --tilt:-8deg; }
+.mascara .body { --d:27px; --hh:97px; --coat:#493047; left:2px; bottom:0; }
+.mascara .cap { --d:28px; --hh:28px; --coat:#a56685; left:1px; top:0; }
+.mascara .band { --d:29px; --hh:5px; --coat:#e4bc80; left:1px; top:26px; }
+.liner { --x:162px; --z:-45px; --w:20px; --h:126px; --tilt:9deg; }
+.liner .stem { --d:13px; --hh:111px; --coat:#251e32; left:3px; bottom:0; }
+.liner .tip { --d:9px; --hh:22px; --coat:#bd8b63; left:5px; top:0; }
+.brush { --x:191px; --z:48px; --w:28px; --h:117px; --tilt:14deg; }
+.brush .handle { --d:15px; --hh:80px; --coat:#b65c7e; left:7px; bottom:0; }
+.brush .metal { --d:19px; --hh:24px; --coat:#d9aa5c; left:5px; top:20px; }
+.brush .bristles { position:absolute; left:1px; top:0; width:27px; height:37px;
+  border-radius:48% 48% 32% 32%; background:linear-gradient(90deg,#66434a,#e6a5a2 45%,#9f6968);
+  transform:translateZ(5px); box-shadow:0 1px 7px #5f394166; }
+
+/* Frasco de perfume: volumen de vidrio con caras distintas. */
+.perfume { --x:247px; --z:-19px; --w:62px; --h:91px; }
+.glass { position:absolute; bottom:0; left:4px; width:54px; height:61px; transform-style:preserve-3d; }
+.glassface { position:absolute; inset:0; border:2px solid #fff9; background:#dba2b3aa; }
+.glassface.gf { transform:translateZ(16px); background:linear-gradient(110deg,#fff8,#ecb3c2c7,#bf7294c7); }
+.glassface.gb { transform:rotateY(180deg) translateZ(16px); }
+.glassface.gl,.glassface.gr { width:32px; left:11px; background:#d37f9c99; }
+.glassface.gl { transform:rotateY(-90deg) translateZ(27px); }
+.glassface.gr { transform:rotateY(90deg) translateZ(27px); }
+.glassface.gt { height:32px; top:14px; transform:rotateX(90deg) translateZ(16px); }
+.bottle-label { position:absolute; left:10px; top:24px; width:34px; padding:5px 0;
+  text-align:center; color:#925169; background:#fff7ecdd; font:8px Georgia,serif;
+  transform:translateZ(17px); }
+.perfume .neck { --d:15px; --hh:21px; --coat:#e2b76e; left:23px; top:12px; }
+.perfume .stopper { --d:31px; --hh:19px; --coat:#d88eac; left:15px; top:0; }
+
+/* Estuche horizontal con pigmentos: base elevada + tapa posterior. */
+.palette { --x:35px; --z:-70px; --w:125px; --h:102px; --turn:12deg; }
+.palette-base { position:absolute; width:115px; height:76px; left:5px; top:18px;
+  transform:translateZ(9px); transform-style:preserve-3d;
+  background:#a44e74; border:6px solid #e4a1b7; border-radius:9px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:5px; padding:6px;
+  box-shadow:0 0 0 4px #8c3f6220; }
+.pan { border-radius:50%; border:3px solid #f9dce5; box-shadow:inset 2px 3px 5px #763d5b77; }
+.pan:nth-child(1) { background:#c17d94; }.pan:nth-child(2) { background:#b65a85; }
+.pan:nth-child(3) { background:#e4a7a7; }.pan:nth-child(4) { background:#b78263; }
+.pan:nth-child(5) { background:#dfa5bd; }.pan:nth-child(6) { background:#71405d; }
+.palette-lid { position:absolute; width:115px; height:76px; left:5px; top:18px;
+  border:8px solid #d987a7; border-radius:8px; background:linear-gradient(#fff7f4,#e9cbd8);
+  box-shadow:inset 0 0 0 4px #fff9; transform:translateZ(-8px); }
+.palette-lid:after { content:"BEAUTY"; position:absolute; bottom:7px; left:0; right:0;
+  color:#b45c7d; font:10px Georgia,serif; letter-spacing:3px; text-align:center; }
+
+/* Polvera horizontal con grosor y rubor redondeado. */
+.compact { --x:235px; --z:67px; --w:65px; --h:15px; }
+.compact .disc { position:absolute; top:-18px; width:65px; height:65px; border-radius:50%;
+  background:radial-gradient(circle at 40% 38%,#eeb6be 0 33%,#ce7999 60%,#a95e7f 62%,#e9c49a 64%,#be8d57 70%);
+  border:5px solid #e8ba80; transform:rotateX(90deg) translateY(-32px);
+  box-shadow:0 0 0 4px #a4587f66; }
+.compact .mirror { position:absolute; top:-68px; left:-4px; width:72px; height:69px;
+  border:7px solid #ddb184; border-radius:50% 50% 12% 12%;
+  background:linear-gradient(130deg,#fffef9,#d7e1e6 60%,#fff);
+  transform:rotateX(-10deg) translateZ(-20px); }
+
+/* Controles sin JS: la vista manual depende del desplazamiento horizontal. */
+input[name="view"] { position:absolute; width:1px; height:1px; opacity:0; }
+#front:checked ~ .orbit-scroll .world { animation:none; transform:rotateX(-17deg) rotateY(0deg); }
+#side:checked ~ .orbit-scroll .world { animation:none; transform:rotateX(-17deg) rotateY(-90deg); }
+#back:checked ~ .orbit-scroll .world { animation:none; transform:rotateX(-17deg) rotateY(180deg); }
+#auto:checked ~ .orbit-scroll .world { animation:autospin 12s linear infinite; }
+@keyframes autospin { from { transform:rotateX(-19deg) rotateY(-29deg); }
+  to { transform:rotateX(-19deg) rotateY(-389deg); } }
+.controls { display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin:22px auto 0; }
+.controls label { cursor:pointer; padding:11px 16px; border-radius:99px;
+  border:1px solid #e4bbcc; background:#fffafbe8; color:#92516e;
+  font-size:13px; font-weight:700; box-shadow:0 3px 10px #9b5d7520; }
+#manual:checked ~ .controls label[for="manual"],#front:checked ~ .controls label[for="front"],
+#side:checked ~ .controls label[for="side"],#back:checked ~ .controls label[for="back"],
+#auto:checked ~ .controls label[for="auto"] { color:#fff; background:#b85d82; border-color:#b85d82; }
+.help { color:#926f80; font-size:13px; line-height:1.7; max-width:650px; margin:20px auto; }
+footer { margin-top:25px; font:italic clamp(20px,4vw,27px) Georgia,serif; color:#ae6583; }
+@media(max-width:600px) { main { padding-top:30px; }
+  .orbit-scroll { height:350px; } .scale { --size:.8; transform:translateY(34px) scale(var(--size)); }
+  .stage:after { bottom:25px; width:230px; } .controls label { font-size:12px; padding:10px 13px; }
+}
+@media(prefers-reduced-motion:reduce) { #auto:checked ~ .orbit-scroll .world { animation-duration:35s; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">UN REGALO HECHO CON CARIÑO</div>
+  <h1>Un detalle <em>para ti.</em></h1>
+  <p class="intro">Un poquito de color, un poquito de magia y una promesa muy especial.</p>
+
+  <input type="radio" name="view" id="manual" checked>
+  <input type="radio" name="view" id="front">
+  <input type="radio" name="view" id="side">
+  <input type="radio" name="view" id="back">
+  <input type="radio" name="view" id="auto">
+
+  <div class="orbit-scroll" aria-label="Desliza a los lados para girar la caja 3D">
+    <div class="runway">
+      <div class="stage">
+        <div class="scale">
+          <div class="world">
+            <div class="floor"></div>
+            <div class="card-note">
+              <div class="card-side frontside"><small>Para ti, con cariño ♡</small><strong>Mientras yo esté,<br>tú no serás<br>espectadora.</strong><small>Con todo mi corazón</small></div>
+              <div class="card-side backside">Con amor ♡</div>
+            </div>
+            <div class="item palette"><div class="palette-lid"></div><div class="palette-base"><i class="pan"></i><i class="pan"></i><i class="pan"></i><i class="pan"></i><i class="pan"></i><i class="pan"></i></div></div>
+            <div class="item lip"><div class="barrel base"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel bullet"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel ring"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+            <div class="item mascara"><div class="barrel body"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel cap"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel band"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+            <div class="item liner"><div class="barrel stem"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel tip"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+            <div class="item brush"><div class="barrel handle"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel metal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="bristles"></div></div>
+            <div class="item perfume"><div class="glass"><div class="glassface gf"></div><div class="glassface gb"></div><div class="glassface gl"></div><div class="glassface gr"></div><div class="glassface gt"></div><div class="bottle-label">ROSE<br>PARFUM</div></div><div class="barrel neck"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="barrel stopper"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+            <div class="item compact"><div class="mirror"></div><div class="disc"></div></div>
+            <div class="wall back"></div><div class="wall left"></div><div class="wall right"></div>
+            <div class="wall front"><div class="ribbon"></div><div class="plaque">For you ♡</div></div>
+            <div class="edge e-back"></div><div class="edge e-left"></div><div class="edge e-right"></div><div class="edge e-front"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="controls" aria-label="Vistas de la caja">
+    <label for="manual">↔ Deslizar</label><label for="front">Frente</label>
+    <label for="side">Lateral</label><label for="back">Detrás</label>
+    <label for="auto">↻ Girar 360°</label>
+  </div>
+  <p class="help">En celular: desliza el dedo horizontalmente sobre la caja. En computadora: arrastra la barra rosa bajo la escena o usa el desplazamiento horizontal del panel táctil. Selecciona «Deslizar» para recuperar el control manual.</p>
+  <footer>Porque mereces ser protagonista de cosas bonitas ♥</footer>
+</main>
+</body>
+</html>
